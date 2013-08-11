@@ -24,7 +24,7 @@ public class Console extends TextArea{
 	private static Noun.modifier modifier = null;
 	private static Operator operator = null;
 	private static int value = 0;
-	
+	private static Engine engine;
 
 	private static final String[] NOUN_LIST = {"diq", "me"};
 	private static LinkedList<Noun> NOUN_OBJECT_LIST = new LinkedList<Noun>();
@@ -81,6 +81,14 @@ public class Console extends TextArea{
 			System.out.println("hi");
 			
 			return 1;
+		} else if (command.equalsIgnoreCase("nextturn")){
+			if (Engine.state.equals(Engine.state.CREATED)){
+				add("Engine not yet created.");
+				return 0;
+			} else {
+				engine.nextTurn();
+				return 1;
+			}
 		}
 
 
@@ -201,6 +209,11 @@ public class Console extends TextArea{
 		instance.append("\n");
 		instance.append(s);
 	}
+
+
+	public static void setEngine(Engine engine2) {
+		engine = engine2;
+	}
 	
 	
 	/*Keyword List (not case sensitive):
@@ -240,7 +253,7 @@ public class Console extends TextArea{
 	 * 
 	 * help
 	 * quit
-	 * 
+	 * nextturn
 	 * 
 	 */
 	

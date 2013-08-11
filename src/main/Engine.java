@@ -30,6 +30,7 @@ public class Engine {
 		System.out.println("Engine created.");
 		player = new Player(Player.Type.PLAYER);
 		diq = new Player(Player.Type.DIQ);
+		state = State.CREATED;
 		GUI.updateDisplays();
 		GUI.append(divider);
 	}
@@ -68,7 +69,14 @@ public class Engine {
 		while (i == 0) {
 			i = rand.nextInt(11);
 		}
-		GUI.append("Deep IQ has rolled a " + i);
+		
+		//Grammar!
+		if (i==8){
+			GUI.append("Deep IQ has rolled an " + i);
+		} else {
+			GUI.append("Deep IQ has rolled a " + i);
+		}
+		
 		return i;
 	}
 

@@ -78,7 +78,13 @@ public class GUI extends JFrame {
 		stageLabel = new JLabel();
 		lifeLabel = new JLabel();
 		enemyLifeLabel = new JLabel();
-
+		
+		
+		Font f = new Font("Copperplate", Font.PLAIN, 40);
+		stageLabel.setFont(f);
+		lifeLabel.setFont(f);
+		enemyLifeLabel.setFont(f);
+		
 		stageLabel.setBounds(50, 30, 85, 85);
 		lifeLabel.setBounds(150, 30, 85, 85);
 		enemyLifeLabel.setBounds(250, 30, 85, 85);
@@ -86,19 +92,21 @@ public class GUI extends JFrame {
 		TitledBorder title = BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.DARK_GRAY), "Stage");
 
-		title.setTitleFont((new Font("AppleGothic", Font.ITALIC, 16)));
+		
+		Font font = new Font("AppleGothic", Font.BOLD, 16);
+		title.setTitleFont(font);
 		title.setTitleJustification(TitledBorder.LEFT);
 
 		TitledBorder title2 = BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.DARK_GRAY), "Your Life");
 
-		title2.setTitleFont((new Font("AppleGothic", Font.ITALIC, 16)));
+		title2.setTitleFont(font);
 		title2.setTitleJustification(TitledBorder.LEFT);
 
 		TitledBorder title3 = BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.DARK_GRAY), "DIQ Life");
 
-		title3.setTitleFont((new Font("AppleGothic", Font.ITALIC, 16)));
+		title3.setTitleFont(font);
 		title3.setTitleJustification(TitledBorder.LEFT);
 
 		stageLabel.setBorder(title);
@@ -126,8 +134,9 @@ public class GUI extends JFrame {
 				nextTurn.setText("Next Turn");
 			}
 		});
-		nextTurn.setBounds(50, 300, 200, 85);
-
+		nextTurn.setBounds(50, 300, 290, 85);
+		nextTurn.setFont(new Font("AppleGothic", Font.BOLD, 40));
+		
 		Console console = new Console();
 		console.setBounds(350, 30, 500, 300);
 
@@ -183,7 +192,8 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (engine == null) {
 					gameScreen();
-					engine = new Engine(instance);									
+					engine = new Engine(instance);
+					Console.setEngine(engine);
 				} else {
 					System.out.println("Engine already exists");
 				}
@@ -203,15 +213,15 @@ public class GUI extends JFrame {
 	}
 
 	public static void updateDisplays() {
-		stageLabel.setText(String.valueOf(Engine.diq.stage));
-		lifeLabel.setText(String.valueOf(Engine.player.life));
+		stageLabel.setText(" " + String.valueOf(Engine.diq.stage));
+		lifeLabel.setText(" " + String.valueOf(Engine.player.life));
 		
 		if (Engine.player.life<= 0){
 			Engine.lose();
 		} else if (Engine.diq.life<=0){
 			Engine.win();
 		}
-		enemyLifeLabel.setText(String.valueOf(Engine.diq.life));
+		enemyLifeLabel.setText(" " + String.valueOf(Engine.diq.life));
 		
 	}
 }
