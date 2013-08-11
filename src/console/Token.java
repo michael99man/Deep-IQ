@@ -9,151 +9,207 @@ import main.GUI;
 
 public class Token implements Noun {
 
-	
 	public static LinkedList<Token> tokenList = new LinkedList<Token>();
 	public TYPE type;
 	public int power;
 	public int toughness;
-	public String desc;
+	public String desc = "";
 	public static GUI parent = null;
 	public LinkedList<staticAbilities> abilityList = new LinkedList<staticAbilities>();
-	
-	public int tokenAmount;
-	
-	public static void setParent(GUI gui){
+
+	public static int tokenAmount = 0;
+
+	public static void setParent(GUI gui) {
 		parent = gui;
 	}
-			
-	//Creature
-	public Token(int p, int t, int roll){
+
+	// Creature
+	public Token(int p, int t, int roll) {
 		tokenAmount++;
-		
-		processAbilities(roll);
-		
+
 		type = TYPE.Creature;
 		power = p;
 		toughness = t;
-		
+
+		processAbilities(roll);
 		tokenList.add(this);
-		parent.addToken(this);
+		GUI.addTab(tokenAmount, this);
 	}
-	
-	private void processAbilities(int roll){
-		//Sigh... Using if loops is the simplest way to do this.
-		
-		if (roll <= 1){
+
+	public void tabAppend(String s) {
+
+		desc += "\t";
+		desc += s;
+		desc += "\n";
+	}
+
+	private void processAbilities(int roll) {
+		// Sigh... Using if loops is the simplest way to do this.
+		if (roll == 8 || roll == 11) {
+			tabAppend("Deep IQ has rolled an " + roll
+					+ " on the Token Chart");
+		} else {
+			tabAppend("Deep IQ has rolled a " + roll
+					+ " on the Token Chart");
+		}
+
+		// OUTPUT: tab
+		if (roll <= 1) {
 			System.out.println("No extra abilities.");
-		} else if (roll == 2){
+			tabAppend("No extra abilities.");
+		} else if (roll == 2) {
 			abilityList.add(staticAbilities.First_Strike);
-		} else if (roll == 3){
-			toughness+=3;
+			tabAppend("First Strike");
+		} else if (roll == 3) {
+			toughness += 3;
 			abilityList.add(staticAbilities.Defender);
-		} else if (roll == 4){
+			tabAppend("+0/+3 (" + power + "/" + toughness + ")");
+			tabAppend("Defender");
+		} else if (roll == 4) {
 			abilityList.add(staticAbilities.Flying);
-		} else if (roll == 5){
-			//Add a random Pro
-			staticAbilities[] tempArray = {staticAbilities.ProRed, staticAbilities.ProBlue, staticAbilities.ProBlack, staticAbilities.ProWhite,staticAbilities.ProGreen};
+			tabAppend("Flying");
+		} else if (roll == 5) {
+			// Add a random Pro
+			staticAbilities[] tempArray = {
+					staticAbilities.Protection_from_Red,
+					staticAbilities.Protection_from_Blue,
+					staticAbilities.Protection_from_Black,
+					staticAbilities.Protection_from_White,
+					staticAbilities.Protection_from_Green };
 			int i = Engine.requestNumber();
-			
-			if (i % 2 == 1){
-				abilityList.add(tempArray[((i-1)/2 + 1)]);
+
+			staticAbilities sa;
+			if (i % 2 == 1) {
+				sa = tempArray[((i - 1) / 2 + 1)];
 			} else {
-				abilityList.add(tempArray[i/2]);
+				sa = tempArray[i / 2];
 			}
-		} else if (roll == 6){
+
+			abilityList.add(sa);
+			tabAppend(sa.name().replace("_", " "));
+
+		} else if (roll == 6) {
 			abilityList.add(staticAbilities.Deathtouch);
 			abilityList.add(staticAbilities.Defender);
-		} else if (roll == 7){
-			power+=2;
+			tabAppend("Deathtouch");
+			tabAppend("Defender");
+		} else if (roll == 7) {
+			power += 2;
+			toughness += 1;
 			abilityList.add(staticAbilities.Flying);
-		} else if (roll == 8){
-			power+=1;
-			toughness+=2;
+			tabAppend("+2/+1");
+			tabAppend("Flying");
+
+		} else if (roll == 8) {
+			power += 2;
+			toughness += 2;
 			abilityList.add(staticAbilities.Lifelink);
-		} else if (roll == 9){
-			power+=2;
+			tabAppend("+2/+2");
+			tabAppend("Lifelink");
+		} else if (roll == 9) {
+			power += 3;
 			abilityList.add(staticAbilities.Trample);
 			abilityList.add(staticAbilities.Haste);
-		} else if (roll == 10){
-			//Add a random Pro
-			staticAbilities[] tempArray = {staticAbilities.ProRed, staticAbilities.ProBlue, staticAbilities.ProBlack, staticAbilities.ProWhite,staticAbilities.ProGreen};
+			tabAppend("+3/+0");
+			tabAppend("Trample");
+			tabAppend("Haste");
+
+		} else if (roll == 10) {
+			// Add a random Pro
+			staticAbilities[] tempArray = {
+					staticAbilities.Protection_from_Red,
+					staticAbilities.Protection_from_Blue,
+					staticAbilities.Protection_from_Black,
+					staticAbilities.Protection_from_White,
+					staticAbilities.Protection_from_Green };
 			int i = Engine.requestNumber();
-			
-			if (i % 2 == 1){
-				abilityList.add(tempArray[((i-1)/2 + 1)]);
+
+			staticAbilities sa;
+
+			if (i % 2 == 1) {
+				sa = tempArray[((i - 1) / 2 + 1) - 1];
 			} else {
-				abilityList.add(tempArray[i/2]);
+				sa = tempArray[i / 2 - 1];
 			}
-			
+
+			abilityList.add(sa);
 			abilityList.add(staticAbilities.Vigilance);
 			abilityList.add(staticAbilities.Lifelink);
-		} else if (roll == 11){
-			power+=2;
-			toughness +=2;
+
+			tabAppend(sa.name().replace("_", " "));
+			tabAppend("Vigilance");
+			tabAppend("Lifelink");
+
+		} else if (roll == 11) {
+			power += 3;
+			toughness += 3;
 			abilityList.add(staticAbilities.Shroud);
-		} else if (roll == 12){
-			abilityList.add(staticAbilities.Annihilator1);
+
+			tabAppend("+3/+3");
+			tabAppend("Shroud");
+
+		} else if (roll == 12) {
+			abilityList.add(staticAbilities.Annihilator_1);
 			abilityList.add(staticAbilities.First_Strike);
-		} else if (roll == 13){
-			//Angel of Death
+			abilityList.add(staticAbilities.Flying);
+
+			tabAppend("Annihilator 1");
+			tabAppend("First Strike");
+			tabAppend("Flying");
+		} else if (roll == 13) {
+			// Angel of Death
 			abilityList.add(staticAbilities.Lifelink);
 			abilityList.add(staticAbilities.Deathtouch);
 			abilityList.add(staticAbilities.Flying);
-		} else if (roll == 14){
-			power+=1;
-			toughness+=1;
-			abilityList.add(staticAbilities.Annihilator2);
-		} else if (roll == 15){
+
+			tabAppend("Lifelink");
+			tabAppend("Deathtouch");
+			tabAppend("Flying");
+		} else if (roll == 14) {
+			power += 4;
+			abilityList.add(staticAbilities.Annihilator_2);
+			tabAppend("+4/+0");
+			tabAppend("Annihilator 2");
+		} else if (roll == 15) {
 			power += 2;
 			toughness += 2;
 			abilityList.add(staticAbilities.Lifelink);
 			abilityList.add(staticAbilities.Flying);
 			abilityList.add(staticAbilities.First_Strike);
-		} else if (roll >= 16){
-			//Welcome Progenitus to the world.
-			abilityList.add(staticAbilities.ProBlack);
-			abilityList.add(staticAbilities.ProRed);
-			abilityList.add(staticAbilities.ProGreen);
-			abilityList.add(staticAbilities.ProWhite);
-			abilityList.add(staticAbilities.ProBlue);
+
+			tabAppend("+2/+2");
+			tabAppend("Lifelink");
+			tabAppend("Flying");
+			tabAppend("First Strike");
+
+		} else if (roll >= 16) {
+			// Welcome Progenitus to the world.
+			abilityList.add(staticAbilities.Protection_from_Everything);
+			tabAppend("Protection from Everything");
 		}
-		
+
+		desc = desc.substring(0, desc.length()-1);
 	}
-	
-	//Other
-	public Token(TYPE type, String describer){
+
+	// Other
+	public Token(TYPE type, String describer) {
 		tokenAmount++;
 		this.type = type;
 		desc = describer;
-		
+
 		tokenList.add(this);
-		parent.addToken(this);
 	}
-	
+
 	public static enum TYPE {
 		Creature, Enchantment;
 	}
 
-
 	public static enum staticAbilities {
-		Lifelink,
-		Deathtouch,
-		Flying,
-		First_Strike,
-		Defender,
-		Haste,
-		Trample,
-		Vigilance,
-		Shroud,
-		
-		ProBlack,
-		ProRed,
-		ProBlue,
-		ProGreen,
-		ProWhite,
-		
-		Annihilator1,
-		Annihilator2
+		Lifelink, Deathtouch, Flying, First_Strike, Defender, Haste, Trample, Vigilance, Shroud,
+
+		Protection_from_Black, Protection_from_Red, Protection_from_Blue, Protection_from_Green, Protection_from_White, Protection_from_Everything,
+
+		Annihilator_1, Annihilator_2,
 	}
 
 	@Override
@@ -162,12 +218,9 @@ public class Token implements Noun {
 		list.add(modifier.INFO);
 		list.add(modifier.DELETE);
 		list.add(modifier.HP);
-		
+
 		return list;
 	}
-
-	
-	
 
 	@Override
 	public String info() {
@@ -197,5 +250,5 @@ public class Token implements Noun {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 }

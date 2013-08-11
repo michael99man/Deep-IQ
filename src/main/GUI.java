@@ -3,7 +3,9 @@ package main;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.TextArea;
 
 import javax.swing.BorderFactory;
@@ -11,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 
 import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
@@ -24,6 +27,7 @@ import console.Token;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 
 public class GUI extends JFrame {
 
@@ -140,6 +144,7 @@ public class GUI extends JFrame {
 		});
 		nextTurn.setBounds(50, 300, 290, 85);
 		nextTurn.setFont(new Font("AppleGothic", Font.BOLD, 40));
+		nextTurn.setFocusable(false);
 		
 		Console console = new Console();
 		console.setBounds(350, 30, 500, 300);
@@ -177,37 +182,62 @@ public class GUI extends JFrame {
 		tokenPanel.setBounds(50,125,290,165);
 		
 		*/
-		tabbedPane = new JTabbedPane();
-		
-		addTab("1", new Token(1, 1, 1));
-		addTab("2", new Token(1,1,1));
-		addTab("3", new Token(1,1,1));
-		addTab("4", new Token(1,1,1));
-		addTab("5", new Token(1,1,1));
-		addTab("6", new Token(1,1,1));
-		
-		
+		tabbedPane = new JTabbedPane();		
 		tabbedPane.setBounds(50,125,290,165);
 		
 		contentPane.add(tabbedPane);
 	}
 
-	public static void addTab(String num, Token t){
-		TokenHolder pane = new TokenHolder(t);
+	public static void addTab(int num, Token t){
 
-		JLabel pt = new JLabel(t.power + "/" + t.toughness);
-		JLabel consoleName = new JLabel("Console Name: TOK" + num);
-	
-		TextArea ta = new TextArea();
+		TokenHolder pane = new TokenHolder(t);
+		pane.setLayout(null);
 		
+		JLabel consoleName = new JLabel("Console name: TOK" + num);
+		consoleName.setBounds(5,0,170,20);
+		
+		JLabel pt = new JLabel("P/T: " + t.power + "/" + t.toughness);
+		pt.setBounds(5,20,100,20);
+		
+		
+		Font font = new Font("AppleGothic", Font.BOLD, 14);
+		pt.setFont(font);
+		consoleName.setFont(font);
+		
+		int height = 45;
+		
+		Font aFont = new Font("AppleGothic", Font.PLAIN, 13);
 		for (Token.staticAbilities sa : t.abilityList){
+			String str = sa.name();
 			
+			str = str.replace("_", " ");
+			
+			JLabel label = new JLabel(str);
+			label.setFont(aFont);
+			
+			label.setBounds(5, height, 200, 20);
+			pane.add(label);
+			height+=15;
 		}
 		
+		
+		
 		pane.add(consoleName);
-		pane.add(ta);
 		pane.add(pt);
+		
 		tabbedPane.addTab("Token " + num, null, pane, "TOK" + num);
+		tabbedPane.setSelectedIndex(num-1);
+		
+		/*
+		int[] keyArray = {KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_3, KeyEvent.VK_4, KeyEvent.VK_5, KeyEvent.VK_6, KeyEvent.VK_7, KeyEvent.VK_8,KeyEvent.VK_9};    
+		
+		if (num<10){
+			tabbedPane.setMnemonicAt(num-1, keyArray[num-1]);
+		}
+		
+		DOESN'T WORK
+		*/
+		
 	}
 	
 	
@@ -221,6 +251,12 @@ public class GUI extends JFrame {
 		textArea.append(s);
 	}
 
+	public static void tabAppend(String s) {
+		textArea.append("\n");
+		textArea.append("\t");
+		textArea.append(s);
+	}
+	
 	public static void WelcomeScreen() {
 		frame.setTitle("Deep IQ");
 		frame.setResizable(false);
@@ -255,10 +291,6 @@ public class GUI extends JFrame {
 		Token.setParent(instance);
 	}
 
-	public void addToken(Token token) {
-		// TODO Auto-generated method stub
-
-	}
 
 	public static void updateDisplays() {
 		stageLabel.setText(" " + String.valueOf(Engine.diq.stage));

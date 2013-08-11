@@ -42,10 +42,10 @@ public class Engine {
 
 		GUI.append(divider);
 		GUI.append("TURN " + turnNumber);
-		GUI.append("Deep IQ has started its turn on Stage " + diq.stage + ".");
+		GUI.append("Deep IQ has started its turn.");
 
 		// main phase
-		int roll = roll();
+		int roll = roll("Stage " + diq.stage + ".");
 
 		if (roll <= Data.DO_NOTHING_ROLLS[diq.stage - 1]) {
 			System.out.println("Deep IQ did nothing!");
@@ -53,18 +53,21 @@ public class Engine {
 		} else {
 			String text = (Data.functionList[diq.stage - 1][roll- Data.DO_NOTHING_ROLLS[diq.stage - 1] - 1].Action());
 			GUI.append(text);
+			
+			if (text.contains("Put a ") && text.contains("token on the battlefield")){
+				GUI.append(Token.tokenList.getLast().desc);
+			}
 		}
 
 		if (Data.ADVANCEMENT_MAX_VALUES[diq.stage - 1] >= roll) {
 			diq.stage++;
 			GUI.append("Deep IQ has advanced to Stage " + "\"" + diq.stage + "\".");
 		}
-		System.out.println("Turn over.");
 		GUI.updateDisplays();
 		state = State.PLAYERTURN;
 	}
 
-	public int roll() {
+	public static int roll(String on) {
 		int i = rand.nextInt(11);
 		while (i == 0) {
 			i = rand.nextInt(11);
@@ -72,9 +75,9 @@ public class Engine {
 		
 		//Grammar!
 		if (i==8){
-			GUI.append("Deep IQ has rolled an " + i);
+			GUI.append("Deep IQ has rolled an " + i + " on " + on);
 		} else {
-			GUI.append("Deep IQ has rolled a " + i);
+			GUI.append("Deep IQ has rolled a " + i + " on " + on);
 		}
 		
 		return i;
@@ -85,7 +88,18 @@ public class Engine {
 	}
 
 	public static void stageRoll(int stage) {
-
+		int roll = roll("Stage " + stage + ".");
+		
+		if (roll <= Data.DO_NOTHING_ROLLS[stage - 1]) {
+			GUI.append("Deep IQ did nothing!");
+		} else {
+			String text = (Data.functionList[stage - 1][roll- Data.DO_NOTHING_ROLLS[stage - 1] - 1].Action());
+			GUI.append(text);
+			
+			if (text.contains("ut a ") && text.contains("token on the battlefield")){
+				GUI.append(Token.tokenList.getLast().desc);
+			}
+		}
 	}
 
 	public static void spookyRoll(int modifier) {

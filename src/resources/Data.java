@@ -1,6 +1,7 @@
 package resources;
 
 import main.Engine;
+import main.GUI;
 import console.Token;
 
 
@@ -39,7 +40,7 @@ public final class Data {
 		(new Function(){ public String Action(){ t = new Token(2, 2, Engine.requestNumber() + 2); return ("Put a 2/2 token on the battlefield (+2).");}}),
 		(new Function(){ public String Action(){ t = new Token(2, 1, Engine.requestNumber() + 4); return ("Put a 2/1 token on the battlefield (+4).");}}),
 		(new Function(){ public String Action(){ return ("Destroy your best land.");}}),
-		(new Function(){ public String Action(){ Engine.diq.stage = 5; t = new Token(1, 1, Engine.requestNumber()); return ("￼￼Move Deep IQ up to Table V and put a 1/1 token on battlefield (+0).");}}),
+		(new Function(){ public String Action(){ Engine.diq.stage = 5; Engine.player.life -= 3; return ("￼￼Move Deep IQ up to Table V and you lose three life.");}}),
 		(new Function(){ public String Action(){ Engine.stageRoll(2); t = new Token(1, 1, Engine.requestNumber() + 1); return ("Put a 1/1 token on the battlefield (+1) and Deep IQ gets a free roll on Table II.");}}),
 		(new Function(){ public String Action(){ return ("Sacrifice your best creature.");}}),
 		(new Function(){ public String Action(){ Engine.spookyRoll(-2); return ("Roll on the Spooky Chart (-2).");}}),
@@ -84,6 +85,16 @@ public final class Data {
 		};
 	
 	
+	
+	
+	public static String spooky(int mod){
+		GUI.tabAppend("Deep IQ has ");
+		
+		
+		
+		
+		return null;
+	}
 	
 	public interface Function{
 		String Action();
