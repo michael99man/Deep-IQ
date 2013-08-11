@@ -20,7 +20,6 @@ import javax.swing.JTextField;
 import console.Console;
 import console.Token;
 
-import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -31,6 +30,7 @@ public class GUI extends JFrame {
 	private static Engine engine = null;
 	private static JFrame frame;
 
+	@SuppressWarnings("unused")
 	private static Console console;
 	static TextArea textArea;
 

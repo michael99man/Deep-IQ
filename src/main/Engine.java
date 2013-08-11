@@ -16,9 +16,10 @@ public class Engine {
 	public static Player player;
 	public static Player diq;
 	public LinkedList<Token> tokenList = new LinkedList<Token>();
-	public Random rand = new Random();
+	private static Random rand = new Random();
 	public int turnNumber = 0;
 	public GUI parent;
+	
 	
 	
 	public enum State{
@@ -70,4 +71,19 @@ public class Engine {
 		return i;
 	}
 
+	public static int requestNumber(){
+		return rand.nextInt();
+	}
+	
+	public enum RollType{
+		Spooky,
+		Stage
+	}
+	
+	public static void manualRoll(RollType rt, int stage){
+		//ROLL AGAIN HERE
+	}
+	
+	
+	
 }

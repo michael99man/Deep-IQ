@@ -25,7 +25,6 @@ public class Player implements Noun {
 	public LinkedList<modifier> getMods() {
 		LinkedList<modifier> list = new LinkedList<modifier>();
 		list.add(modifier.INFO);
-		list.add(modifier.DELETE);
 		list.add(modifier.HP);
 		
 		tempName = "Your";

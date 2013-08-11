@@ -1,4 +1,4 @@
-package console;
+package resources;
 
 public class Action {
 

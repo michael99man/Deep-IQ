@@ -1,7 +1,6 @@
 package console;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import operators.Operator;
 
@@ -16,6 +15,7 @@ public class Token implements Noun {
 	public int toughness;
 	public String desc;
 	public static GUI parent = null;
+	public LinkedList<staticAbilities> abilityList = new LinkedList<staticAbilities>();
 	
 	public int tokenAmount;
 	
@@ -23,23 +23,54 @@ public class Token implements Noun {
 		parent = gui;
 	}
 			
-	public Token(TYPE type, int p, int t, String describer){
+	//Creature
+	public Token(int p, int t, int roll){
 		tokenAmount++;
-		this.type = type;
+		
+		//process roll
+		
+		type = TYPE.Creature;
 		power = p;
 		toughness = t;
-		desc = describer;
 		
 		tokenList.add(this);
 		parent.addToken(this);
 	}
 	
 	
+	//Other
+	public Token(TYPE type, String describer){
+		tokenAmount++;
+		this.type = type;
+		desc = describer;
+		
+		tokenList.add(this);
+		parent.addToken(this);
+	}
+	
 	public static enum TYPE {
 		Creature, Enchantment;
 	}
 
 
+	public static enum staticAbilities {
+		Lifelink,
+		Deathtouch,
+		Flying,
+		First_Strike,
+		Regeneration,
+		Defender,
+		Haste,
+		Trample,
+		Vigilance,
+		Shroud,
+		
+		ProBlack,
+		ProRed,
+		ProBlue,
+		ProGreen,
+		ProWhite
+	}
 
 	@Override
 	public LinkedList<modifier> getMods() {
@@ -51,6 +82,7 @@ public class Token implements Noun {
 		return list;
 	}
 
+	
 	
 
 	@Override
