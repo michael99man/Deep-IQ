@@ -75,13 +75,14 @@ public class Engine {
 		return rand.nextInt();
 	}
 	
-	public enum RollType{
-		Spooky,
-		Stage
+
+	
+	public static void stageRoll(int stage){
+		
 	}
 	
-	public static void manualRoll(RollType rt, int stage){
-		//ROLL AGAIN HERE
+	public static void spookyRoll(int modifier){
+		
 	}
 	
 	
