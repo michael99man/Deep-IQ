@@ -201,16 +201,20 @@ public class GUI extends JFrame {
 		pane.setLayout(null);
 
 		JLabel consoleName = new JLabel("Console name: TOK" + num);
-		consoleName.setBounds(5, 0, 170, 20);
+		consoleName.setBounds(5, 0, 170, 18);
 
 		JLabel pt = new JLabel("P/T: " + t.power + "/" + t.toughness);
-		pt.setBounds(5, 20, 100, 20);
+		pt.setBounds(5, 18, 100, 18);
+		
+		JLabel tapped = new JLabel("Tapped: " + t.tapped);
+		tapped.setBounds(5, 36, 150, 18);
 
 		Font font = new Font("AppleGothic", Font.BOLD, 14);
 		pt.setFont(font);
 		consoleName.setFont(font);
+		tapped.setFont(font);
 
-		int height = 45;
+		int height = 48;
 
 		Font aFont = new Font("AppleGothic", Font.PLAIN, 13);
 		for (Token.staticAbilities sa : t.abilityList) {
@@ -228,6 +232,7 @@ public class GUI extends JFrame {
 
 		pane.add(consoleName);
 		pane.add(pt);
+		pane.add(tapped);
 
 		tabbedPane.addTab("Token " + num, null, pane, "TOK" + num);
 

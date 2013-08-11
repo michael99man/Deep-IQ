@@ -37,6 +37,7 @@ public class Engine {
 
 	public void nextTurn() {
 		state = State.DIQTURN;
+		Token.untapAll();
 		GUI.updateDisplays();
 		turnNumber++;
 
@@ -65,9 +66,9 @@ public class Engine {
 			diq.stage++;
 			GUI.append("Deep IQ has advanced to Stage " + "\"" + diq.stage
 					+ "\".");
-		}
-		GUI.updateDisplays();
+		}		
 		state = State.PLAYERTURN;
+		GUI.updateDisplays();
 	}
 
 	public static int roll(String on) {

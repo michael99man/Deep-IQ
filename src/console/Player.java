@@ -83,6 +83,7 @@ public class Player implements Noun {
 
 	
 	
+	
 	//HARD TO DO. MUST UNDO TURNS (CREATE SAVE STATE FOR EACH TURN).
 	@Override
 	public String turn(Operator o, int b) {
@@ -92,7 +93,19 @@ public class Player implements Noun {
 
 	@Override
 	public String delete() {
-		// TODO Auto-generated method stub
+		//NOT SUPPORTED
+		return null;
+	}
+
+	@Override
+	public String tap() {
+		//NOT SUPPORTED
+		return null;
+	}
+
+	@Override
+	public String untap() {
+		//NOT SUPPORTED
 		return null;
 	}
 	

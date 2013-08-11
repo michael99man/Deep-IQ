@@ -19,6 +19,16 @@ public class Token implements Noun {
 	public String consoleName;
 	public static int tokenAmount = 0;
 
+	
+	public boolean tapped = false;
+	
+	
+	public static void untapAll(){
+		for (Token t: tokenList){
+			t.tapped = false;
+		}
+	}
+	
 	public static void setParent(GUI gui) {
 		parent = gui;
 	}
@@ -81,9 +91,9 @@ public class Token implements Noun {
 
 			staticAbilities sa;
 			if (i % 2 == 1) {
-				sa = tempArray[((i - 1) / 2 + 1)];
+				sa = tempArray[((i - 1) / 2 + 1) - 1];
 			} else {
-				sa = tempArray[i / 2];
+				sa = tempArray[(i / 2) - 1];
 			}
 
 			abilityList.add(sa);
@@ -219,7 +229,8 @@ public class Token implements Noun {
 		list.add(modifier.INFO);
 		list.add(modifier.DELETE);
 		list.add(modifier.HP);
-
+		list.add(modifier.TAP);
+		list.add(modifier.UNTAP);
 		return list;
 	}
 
@@ -234,6 +245,7 @@ public class Token implements Noun {
 
 			info = Console.tabAdd(info, ("P/T: " + power + "/" + toughness));
 			info = Console.tabAdd(info, ("Type: Creature"));
+			info = Console.tabAdd(info, ("Tapped: " + (tapped ? "Yes" : "No")));
 			info = Console.tabAdd(info, "Static abilities: ");
 
 			boolean hasAbilities = false;
@@ -278,6 +290,18 @@ public class Token implements Noun {
 		tokenList.remove(this);
 		return ("Token \"" + consoleName + "\"" + " deleted ");
 		// Updating is done in Console class, no need to update here.
+	}
+
+	@Override
+	public String tap() {
+		tapped = true;
+		return(consoleName + " has been tapped.");
+	}
+
+	@Override
+	public String untap() {
+		tapped = false;
+		return(consoleName + " has been untapped.");
 	}
 
 }

@@ -14,7 +14,9 @@ public interface Noun {
 		HP,
 		TURN,
 		DELETE,
-		INFO,
+		INFO, 
+		TAP,
+		UNTAP
 	}
 	
 	
@@ -24,5 +26,7 @@ public interface Noun {
 	String turn(Operator o, int b);
 	String delete();
 	String info();
+	String tap();
+	String untap();
 }
 

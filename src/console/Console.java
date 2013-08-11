@@ -29,8 +29,8 @@ public class Console extends TextArea{
 	private static LinkedList<String> NOUN_LIST = new LinkedList<String>();
 	private static LinkedList<Noun> NOUN_OBJECT_LIST = new LinkedList<Noun>();
 	
-	private static final String[] MODIFIER_LIST = {"stg", "hp", "info", "delete", "turn"};
-	private static Noun.modifier[] MODIFIER_OBJECT_LIST = {Noun.modifier.STG, Noun.modifier.HP, Noun.modifier.INFO, Noun.modifier.DELETE, Noun.modifier.TURN};
+	private static final String[] MODIFIER_LIST = {"stg", "hp", "info", "delete", "turn", "untap", "tap"};
+	private static Noun.modifier[] MODIFIER_OBJECT_LIST = {Noun.modifier.STG, Noun.modifier.HP, Noun.modifier.INFO, Noun.modifier.DELETE, Noun.modifier.TURN, Noun.modifier.UNTAP, Noun.modifier.TAP};
 	
 	private static final String[] OPERATOR_LIST = {"+","-","="};
 	private static final Operator[] OPERATOR_OBJECT_LIST = {new operators.Add(), new operators.Subtract(), new operators.SetTo()};
@@ -54,9 +54,13 @@ public class Console extends TextArea{
 		wipe();
 		TERM_LIST.add(Noun.modifier.INFO);
 		TERM_LIST.add(Noun.modifier.DELETE);
+		//Check UNTAP first, as if TAP is checked first, UNTAP triggers TAP.
+		TERM_LIST.add(Noun.modifier.UNTAP);
+		TERM_LIST.add(Noun.modifier.TAP);
 		NON_TERM_LIST.add(Noun.modifier.STG);
 		NON_TERM_LIST.add(Noun.modifier.HP);
 		NON_TERM_LIST.add(Noun.modifier.TURN);
+		
 		
 		instance = this;
 		setText("     Welcome to the Deep IQ Console. Input commands below.");
@@ -147,11 +151,6 @@ public class Console extends TextArea{
 				modifier = MODIFIER_OBJECT_LIST[i];
 				System.out.println("Modifier in statement is " + "\"" + MODIFIER_LIST[i] + "\"");
 				command = command.replace(MODIFIER_LIST[i], "");
-			
-				if (TERM_LIST.contains(MODIFIER_LIST[i])){
-					//noun_function.Action();
-					return 1;
-				}
 			}
 		}
 		
@@ -172,7 +171,7 @@ public class Console extends TextArea{
 		//CHECK IF MODIFIER TERMINATES
 		
 		if (TERM_LIST.contains(modifier)){
-			Function[] functionList = {new Function(){ public String Action(){ return noun.info();}} , new Function(){ public String Action(){ return noun.delete();}}};
+			Function[] functionList = {new Function(){ public String Action(){ return noun.info();}} , new Function(){ public String Action(){ return noun.delete();}}, new Function(){ public String Action(){ return noun.untap();}}, new Function(){ public String Action(){ return noun.tap();}}   };
 			
 			for (int i = 0; i<TERM_LIST.size(); i++){
 				if (TERM_LIST.get(i).equals(modifier)){
@@ -284,6 +283,8 @@ public class Console extends TextArea{
 	 * 
 	 * delete
 	 * info (e.g. DIQ info or tok 1 info)
+	 * tap
+	 * untap
 	 *
 	 * OPERATOR VERBS:
 	 * _____________
