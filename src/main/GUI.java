@@ -40,13 +40,14 @@ public class GUI extends JFrame {
 	private static Console console;
 	static TextArea textArea;
 
+	public static  JButton nextTurn;
 	public static GUI instance;
 	private static JLabel stageLabel;
 	private static JLabel lifeLabel;
 	private static JLabel enemyLifeLabel;
 
 	public static JTabbedPane tabbedPane;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -86,13 +87,12 @@ public class GUI extends JFrame {
 		stageLabel = new JLabel();
 		lifeLabel = new JLabel();
 		enemyLifeLabel = new JLabel();
-		
-		
+
 		Font f = new Font("Copperplate", Font.PLAIN, 40);
 		stageLabel.setFont(f);
 		lifeLabel.setFont(f);
 		enemyLifeLabel.setFont(f);
-		
+
 		stageLabel.setBounds(50, 30, 85, 85);
 		lifeLabel.setBounds(150, 30, 85, 85);
 		enemyLifeLabel.setBounds(250, 30, 85, 85);
@@ -100,7 +100,6 @@ public class GUI extends JFrame {
 		TitledBorder title = BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.DARK_GRAY), "Stage");
 
-		
 		Font font = new Font("AppleGothic", Font.BOLD, 16);
 		title.setTitleFont(font);
 		title.setTitleJustification(TitledBorder.LEFT);
@@ -134,18 +133,29 @@ public class GUI extends JFrame {
 		textArea.setText("Welcome to Michael Man's version of Deep IQ.");
 		append("Check this area for game updates.");
 
-		final JButton nextTurn;
+		
 		nextTurn = new JButton("Begin");
 		nextTurn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				engine.nextTurn();
-				nextTurn.setText("Next Turn");
+				
+				if (Engine.state.equals(Engine.State.FINISHED)){
+					//Starts a new game
+					gameScreen();
+					engine = new Engine(instance);
+					Console.setEngine(engine);
+					//Cleanup
+					Token.tokenList = new LinkedList<Token>();
+				} else if (Engine.state.equals(Engine.State.PLAYERTURN) || Engine.state.equals(Engine.State.CREATED)){
+					engine.nextTurn();
+					nextTurn.setText("Next Turn");
+				}
+				
 			}
 		});
 		nextTurn.setBounds(50, 300, 290, 85);
 		nextTurn.setFont(new Font("AppleGothic", Font.BOLD, 40));
 		nextTurn.setFocusable(false);
-		
+
 		Console console = new Console();
 		console.setBounds(350, 30, 500, 300);
 
@@ -153,17 +163,17 @@ public class GUI extends JFrame {
 		inputField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				if (arg0.getKeyCode() == KeyEvent.VK_ENTER){
+				if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
 					System.out.println("Command sent: " + inputField.getText());
 					Console.sendCommand(inputField.getText());
 					inputField.setText("");
 				}
 			}
 		});
-		
-		inputField.setBounds(347,333,506,35);
+
+		inputField.setBounds(347, 333, 506, 35);
 		inputField.setText("help");
-		
+
 		contentPane.add(inputField);
 		contentPane.add(console);
 		contentPane.add(nextTurn);
@@ -171,77 +181,71 @@ public class GUI extends JFrame {
 		contentPane.add(stageLabel);
 		contentPane.add(lifeLabel);
 		contentPane.add(enemyLifeLabel);
-		
-		
-		//TOKENS
-		
+
+		// TOKENS
+
 		/*
-		JPanel tokenPanel = new JPanel();
-		tokenPanel.setPreferredSize(new Dimension(290,165));
-		tokenPanel.setBackground(Color.BLUE);
-		tokenPanel.setBounds(50,125,290,165);
-		
-		*/
-		tabbedPane = new JTabbedPane();		
-		tabbedPane.setBounds(50,125,290,165);
-		
+		 * JPanel tokenPanel = new JPanel(); tokenPanel.setPreferredSize(new
+		 * Dimension(290,165)); tokenPanel.setBackground(Color.BLUE);
+		 * tokenPanel.setBounds(50,125,290,165);
+		 */
+		tabbedPane = new JTabbedPane();
+		tabbedPane.setBounds(50, 125, 290, 165);
+
 		contentPane.add(tabbedPane);
 	}
 
-	public static void addTab(int num, Token t){
+	public static void addTab(int num, Token t, boolean refocus) {
 
 		TokenHolder pane = new TokenHolder(t);
 		pane.setLayout(null);
-		
+
 		JLabel consoleName = new JLabel("Console name: TOK" + num);
-		consoleName.setBounds(5,0,170,20);
-		
+		consoleName.setBounds(5, 0, 170, 20);
+
 		JLabel pt = new JLabel("P/T: " + t.power + "/" + t.toughness);
-		pt.setBounds(5,20,100,20);
-		
-		
+		pt.setBounds(5, 20, 100, 20);
+
 		Font font = new Font("AppleGothic", Font.BOLD, 14);
 		pt.setFont(font);
 		consoleName.setFont(font);
-		
+
 		int height = 45;
-		
+
 		Font aFont = new Font("AppleGothic", Font.PLAIN, 13);
-		for (Token.staticAbilities sa : t.abilityList){
+		for (Token.staticAbilities sa : t.abilityList) {
 			String str = sa.name();
-			
+
 			str = str.replace("_", " ");
-			
+
 			JLabel label = new JLabel(str);
 			label.setFont(aFont);
-			
+
 			label.setBounds(5, height, 200, 20);
 			pane.add(label);
-			height+=15;
+			height += 15;
 		}
-		
-		
-		
+
 		pane.add(consoleName);
 		pane.add(pt);
-		
+
 		tabbedPane.addTab("Token " + num, null, pane, "TOK" + num);
-		tabbedPane.setSelectedIndex(num-1);
-		
-		/*
-		int[] keyArray = {KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_3, KeyEvent.VK_4, KeyEvent.VK_5, KeyEvent.VK_6, KeyEvent.VK_7, KeyEvent.VK_8,KeyEvent.VK_9};    
-		
-		if (num<10){
-			tabbedPane.setMnemonicAt(num-1, keyArray[num-1]);
+
+		if (refocus) {
+			tabbedPane.setSelectedIndex(num - 1);
 		}
-		
-		DOESN'T WORK
-		*/
-		
+		instance.validate();
+		/*
+		 * int[] keyArray = {KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_3,
+		 * KeyEvent.VK_4, KeyEvent.VK_5, KeyEvent.VK_6, KeyEvent.VK_7,
+		 * KeyEvent.VK_8,KeyEvent.VK_9};
+		 * 
+		 * if (num<10){ tabbedPane.setMnemonicAt(num-1, keyArray[num-1]); }
+		 * 
+		 * DOESN'T WORK
+		 */
 	}
-	
-	
-	
+
 	public GUI() {
 		instance = this;
 	}
@@ -256,7 +260,7 @@ public class GUI extends JFrame {
 		textArea.append("\t");
 		textArea.append(s);
 	}
-	
+
 	public static void WelcomeScreen() {
 		frame.setTitle("Deep IQ");
 		frame.setResizable(false);
@@ -291,31 +295,46 @@ public class GUI extends JFrame {
 		Token.setParent(instance);
 	}
 
-
 	public static void updateDisplays() {
 		stageLabel.setText(" " + String.valueOf(Engine.diq.stage));
 		lifeLabel.setText(" " + String.valueOf(Engine.player.life));
-		
-		if (Engine.player.life<= 0){
+
+		if (Engine.player.life <= 0) {
 			Engine.lose();
-		} else if (Engine.diq.life<=0){
+		} else if (Engine.diq.life <= 0) {
 			Engine.win();
 		}
 		enemyLifeLabel.setText(" " + String.valueOf(Engine.diq.life));
-		
+
 	}
-	
+
+	public static void updateTokens(boolean refocus) {
+		// UPDATE TOKEN DISPLAY HERE
+		tabbedPane.removeAll();
+		contentPane.remove(tabbedPane);
+		tabbedPane = new JTabbedPane();
+		tabbedPane.setBounds(50, 125, 290, 165);
+
+		contentPane.add(tabbedPane);
+
+		int i = 1;
+		for (Token t : Token.tokenList) {
+			addTab((i), t, refocus);
+			t.consoleName = ("TOK" + i);
+			i++;
+		}
+		instance.repaint();
+	}
+
 }
 
-class TokenHolder extends JPanel{
+class TokenHolder extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	Token token;
-	public TokenHolder(Token t){
+
+	public TokenHolder(Token t) {
 		token = t;
 	}
-	public void setPreferredSize(int i, int j) {
-		// TODO Auto-generated method stub
-		
-	}
+
 }

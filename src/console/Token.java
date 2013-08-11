@@ -16,7 +16,7 @@ public class Token implements Noun {
 	public String desc = "";
 	public static GUI parent = null;
 	public LinkedList<staticAbilities> abilityList = new LinkedList<staticAbilities>();
-
+	public String consoleName;
 	public static int tokenAmount = 0;
 
 	public static void setParent(GUI gui) {
@@ -26,14 +26,17 @@ public class Token implements Noun {
 	// Creature
 	public Token(int p, int t, int roll) {
 		tokenAmount++;
-
+		consoleName = "TOK" + tokenAmount;
 		type = TYPE.Creature;
 		power = p;
 		toughness = t;
 
 		processAbilities(roll);
 		tokenList.add(this);
-		GUI.addTab(tokenAmount, this);
+		GUI.updateTokens(true);
+
+		// Update Console List
+		Console.updateTokens();
 	}
 
 	public void tabAppend(String s) {
@@ -46,11 +49,9 @@ public class Token implements Noun {
 	private void processAbilities(int roll) {
 		// Sigh... Using if loops is the simplest way to do this.
 		if (roll == 8 || roll == 11) {
-			tabAppend("Deep IQ has rolled an " + roll
-					+ " on the Token Chart");
+			tabAppend("Deep IQ has rolled an " + roll + " on the Token Chart");
 		} else {
-			tabAppend("Deep IQ has rolled a " + roll
-					+ " on the Token Chart");
+			tabAppend("Deep IQ has rolled a " + roll + " on the Token Chart");
 		}
 
 		// OUTPUT: tab
@@ -188,7 +189,7 @@ public class Token implements Noun {
 			tabAppend("Protection from Everything");
 		}
 
-		desc = desc.substring(0, desc.length()-1);
+		desc = desc.substring(0, desc.length() - 1);
 	}
 
 	// Other
@@ -224,7 +225,34 @@ public class Token implements Noun {
 
 	@Override
 	public String info() {
-		return "yo homie";
+		String info = "\n";
+		info += consoleName + " INFO:";
+		info += "\n";
+		info += "---------------";
+
+		if (type.equals(TYPE.Creature)) {
+
+			info = Console.tabAdd(info, ("P/T: " + power + "/" + toughness));
+			info = Console.tabAdd(info, ("Type: Creature"));
+			info = Console.tabAdd(info, "Static abilities: ");
+
+			boolean hasAbilities = false;
+			for (staticAbilities sa : abilityList) {
+				hasAbilities = true;
+				info += (sa.name().replace("_", " "));
+				info += ", ";
+			}
+
+			if (hasAbilities) {
+				info = info.substring(0, info.length() - 2);
+			} else {
+				info += "NONE.";
+			}
+		} else {
+			// Enchantment info
+		}
+
+		return info;
 	}
 
 	@Override
@@ -247,8 +275,9 @@ public class Token implements Noun {
 
 	@Override
 	public String delete() {
-		// TODO Auto-generated method stub
-		return null;
+		tokenList.remove(this);
+		return ("Token \"" + consoleName + "\"" + " deleted ");
+		// Updating is done in Console class, no need to update here.
 	}
 
 }

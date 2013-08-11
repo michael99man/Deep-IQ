@@ -26,7 +26,7 @@ public class Console extends TextArea{
 	private static int value = 0;
 	private static Engine engine;
 
-	private static final String[] NOUN_LIST = {"diq", "me"};
+	private static LinkedList<String> NOUN_LIST = new LinkedList<String>();
 	private static LinkedList<Noun> NOUN_OBJECT_LIST = new LinkedList<Noun>();
 	
 	private static final String[] MODIFIER_LIST = {"stg", "hp", "info", "delete", "turn"};
@@ -36,11 +36,22 @@ public class Console extends TextArea{
 	private static final Operator[] OPERATOR_OBJECT_LIST = {new operators.Add(), new operators.Subtract(), new operators.SetTo()};
 	
 	//list of keywords that end the command
-	private static final LinkedList<Noun.modifier> TERM_LIST = new LinkedList<Noun.modifier>();
-	private static final LinkedList<Noun.modifier> NON_TERM_LIST = new LinkedList<Noun.modifier>();
+	private static LinkedList<Noun.modifier> TERM_LIST = new LinkedList<Noun.modifier>();
+	private static LinkedList<Noun.modifier> NON_TERM_LIST = new LinkedList<Noun.modifier>();
 
+	public static void wipe(){
+		TERM_LIST = new LinkedList<Noun.modifier>();
+		NON_TERM_LIST = new LinkedList<Noun.modifier>();
+		NOUN_OBJECT_LIST = new LinkedList<Noun>();
+		NOUN_LIST = new LinkedList<String>();
+		noun = null;
+		modifier = null;
+		operator = null;
+		
+	}
 	
 	public Console(){
+		wipe();
 		TERM_LIST.add(Noun.modifier.INFO);
 		TERM_LIST.add(Noun.modifier.DELETE);
 		NON_TERM_LIST.add(Noun.modifier.STG);
@@ -58,19 +69,35 @@ public class Console extends TextArea{
 
 	
 	public static void updateTokens(){
+		//UPDATING STRING REFERENCES
+		NOUN_LIST = new LinkedList<String>();
+		NOUN_LIST.add("diq");
+		NOUN_LIST.add("me");
 		
+		
+		//UPDATING OBJECT REFERENCES
 		NOUN_OBJECT_LIST = new LinkedList<Noun>();
 		NOUN_OBJECT_LIST.add(Engine.diq);
 		NOUN_OBJECT_LIST.add(Engine.player);
 		
+		int i = 1;
 		for(Token t: Token.tokenList){
 			NOUN_OBJECT_LIST.add(t);
+			NOUN_LIST.add(("TOK" + i));
+			i++;
 		}
 		
 	}
 	
 	
 	public static int sendCommand(String command) {
+		
+		if (command.replace(" ", "").equals("")){
+			add("\n");
+		
+			return 0;
+		}
+		
 		updateTokens();
 		String response = null;
 		
@@ -78,7 +105,7 @@ public class Console extends TextArea{
 		//Check for commands first
 		if (command.equalsIgnoreCase("help")){
 			//print help
-			System.out.println("hi");
+			System.out.println("HELP WANTED.");
 			
 			return 1;
 		} else if (command.equalsIgnoreCase("nextturn")){
@@ -92,13 +119,15 @@ public class Console extends TextArea{
 		}
 
 
-		for (int i = 0; i < NOUN_LIST.length; i++){
-			if (command.contains(NOUN_LIST[i])){
+
+		
+		for (int i = 0; i < NOUN_LIST.size(); i++){
+			if (contains(command, NOUN_LIST.get(i))){
 				noun = NOUN_OBJECT_LIST.get(i);
 				//USEFUL THING: LinkedList.get(int index)
 				
-				System.out.println("Noun in statement is " + "\"" + NOUN_LIST[i] + "\"");
-				command = command.replace(NOUN_LIST[i], "");
+				System.out.println("Noun in statement is " + "\"" + NOUN_LIST.get(i) + "\"");
+				command = command.replace(NOUN_LIST.get(i), "");
 				break;
 			}
 		}
@@ -114,7 +143,7 @@ public class Console extends TextArea{
 		modifier = null;
 		
 		for (int i = 0; i < MODIFIER_LIST.length; i++){
-			if (command.contains(MODIFIER_LIST[i])){
+			if (contains(command,MODIFIER_LIST[i])){
 				modifier = MODIFIER_OBJECT_LIST[i];
 				System.out.println("Modifier in statement is " + "\"" + MODIFIER_LIST[i] + "\"");
 				command = command.replace(MODIFIER_LIST[i], "");
@@ -143,11 +172,11 @@ public class Console extends TextArea{
 		//CHECK IF MODIFIER TERMINATES
 		
 		if (TERM_LIST.contains(modifier)){
-			Function[] functionList = {new Function(){ public String Action(){ return noun.info();}} , new Function(){ public String Action(){ return noun.info();}}};
+			Function[] functionList = {new Function(){ public String Action(){ return noun.info();}} , new Function(){ public String Action(){ return noun.delete();}}};
 			
 			for (int i = 0; i<TERM_LIST.size(); i++){
 				if (TERM_LIST.get(i).equals(modifier)){
-					System.out.println("Command executed");
+					System.out.println("Command executed.");
 					response = functionList[i].Action();
 				}
 			}
@@ -193,13 +222,28 @@ public class Console extends TextArea{
 		}
 		
 		GUI.updateDisplays();
-		
-		
-		
+		GUI.updateTokens(false);
+		updateTokens();
 		add(response);
+		
+		
+		//Cleanup
+		noun = null;
+		modifier = null;
+		operator = null;
+		value = 0;
+		
 		return 0;
 	}
 	
+	private static boolean contains(String command, String string) {
+		
+		if (command.toLowerCase().contains(string.toLowerCase())){
+			return true;
+		}
+		return false;
+	}
+
 	interface Function{
 		String Action();
 	}
@@ -215,6 +259,13 @@ public class Console extends TextArea{
 		engine = engine2;
 	}
 	
+	public static String tabAdd(String s, String s2){
+		s += "\n";
+		s += "\t";
+		s += s2;
+		
+		return s;
+	}
 	
 	/*Keyword List (not case sensitive):
 	 * 

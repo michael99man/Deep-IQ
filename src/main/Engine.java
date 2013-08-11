@@ -51,17 +51,20 @@ public class Engine {
 			System.out.println("Deep IQ did nothing!");
 			GUI.append("Deep IQ did nothing!");
 		} else {
-			String text = (Data.functionList[diq.stage - 1][roll- Data.DO_NOTHING_ROLLS[diq.stage - 1] - 1].Action());
+			String text = (Data.functionList[diq.stage - 1][roll
+					- Data.DO_NOTHING_ROLLS[diq.stage - 1] - 1].Action());
 			GUI.append(text);
-			
-			if (text.contains("Put a ") && text.contains("token on the battlefield")){
+
+			if (text.contains("Put a ")
+					&& text.contains("token on the battlefield")) {
 				GUI.append(Token.tokenList.getLast().desc);
 			}
 		}
 
 		if (Data.ADVANCEMENT_MAX_VALUES[diq.stage - 1] >= roll) {
 			diq.stage++;
-			GUI.append("Deep IQ has advanced to Stage " + "\"" + diq.stage + "\".");
+			GUI.append("Deep IQ has advanced to Stage " + "\"" + diq.stage
+					+ "\".");
 		}
 		GUI.updateDisplays();
 		state = State.PLAYERTURN;
@@ -72,14 +75,14 @@ public class Engine {
 		while (i == 0) {
 			i = rand.nextInt(11);
 		}
-		
-		//Grammar!
-		if (i==8){
+
+		// Grammar!
+		if (i == 8) {
 			GUI.append("Deep IQ has rolled an " + i + " on " + on);
 		} else {
 			GUI.append("Deep IQ has rolled a " + i + " on " + on);
 		}
-		
+
 		return i;
 	}
 
@@ -89,14 +92,16 @@ public class Engine {
 
 	public static void stageRoll(int stage) {
 		int roll = roll("Stage " + stage + ".");
-		
+
 		if (roll <= Data.DO_NOTHING_ROLLS[stage - 1]) {
 			GUI.append("Deep IQ did nothing!");
 		} else {
-			String text = (Data.functionList[stage - 1][roll- Data.DO_NOTHING_ROLLS[stage - 1] - 1].Action());
+			String text = (Data.functionList[stage - 1][roll
+					- Data.DO_NOTHING_ROLLS[stage - 1] - 1].Action());
 			GUI.append(text);
-			
-			if (text.contains("ut a ") && text.contains("token on the battlefield")){
+
+			if (text.contains("ut a ")
+					&& text.contains("token on the battlefield")) {
 				GUI.append(Token.tokenList.getLast().desc);
 			}
 		}
@@ -107,12 +112,17 @@ public class Engine {
 	}
 
 	public static void lose() {
-		// TODO Auto-generated method stub
+		state = State.FINISHED;
+		GUI.append(divider);
+		GUI.append(divider);
+		GUI.append("DEEP IQ HAS TRIUMPHED.");
+		GUI.append("GAME OVER");
 		
+		GUI.nextTurn.setText("Try again?");
 	}
-	
-	public static void win(){
-		
+
+	public static void win() {
+		state = State.FINISHED;
 	}
 
 }

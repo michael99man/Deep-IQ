@@ -88,9 +88,47 @@ public final class Data {
 	
 	
 	public static String spooky(int mod){
-		GUI.tabAppend("Deep IQ has ");
+		int roll = Engine.requestNumber() + mod;
 		
+		if (roll == 8 || roll == 11) {
+			GUI.tabAppend("Deep IQ has rolled an " + roll
+					+ " on the Token Chart");
+		} else {
+			GUI.tabAppend("Deep IQ has rolled a " + roll
+					+ " on the Token Chart");
+		}
 		
+		if (roll <= 1){
+			//New enchantment token
+			//Add bonuses on creation
+			//Remove bonuses on deletion
+		} else if (roll<= 2){
+			
+		} else if (roll<= 3){
+			
+		} else if (roll<= 4){
+			
+		} else if (roll<= 5){
+			
+		} else if (roll<= 6){
+			
+		} else if (roll<= 7){
+			
+		} else if (roll<= 8){
+			
+		} else if (roll<= 9){
+			
+		} else if (roll<= 10){
+			
+		} else if (roll<= 11){
+			
+		} else if (roll<= 12){
+			
+		} else if (roll<= 13){
+			
+		} else if (roll<= 14){
+			
+		} 
 		
 		
 		return null;
