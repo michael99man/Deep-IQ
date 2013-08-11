@@ -205,6 +205,12 @@ public class GUI extends JFrame {
 	public static void updateDisplays() {
 		stageLabel.setText(String.valueOf(Engine.diq.stage));
 		lifeLabel.setText(String.valueOf(Engine.player.life));
+		
+		if (Engine.player.life<= 0){
+			Engine.lose();
+		} else if (Engine.diq.life<=0){
+			Engine.win();
+		}
 		enemyLifeLabel.setText(String.valueOf(Engine.diq.life));
 		
 	}
