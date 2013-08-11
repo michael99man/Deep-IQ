@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.TextArea;
@@ -9,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
@@ -39,6 +41,8 @@ public class GUI extends JFrame {
 	private static JLabel lifeLabel;
 	private static JLabel enemyLifeLabel;
 
+	public static JTabbedPane tabbedPane;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -162,8 +166,52 @@ public class GUI extends JFrame {
 		contentPane.add(stageLabel);
 		contentPane.add(lifeLabel);
 		contentPane.add(enemyLifeLabel);
+		
+		
+		//TOKENS
+		
+		/*
+		JPanel tokenPanel = new JPanel();
+		tokenPanel.setPreferredSize(new Dimension(290,165));
+		tokenPanel.setBackground(Color.BLUE);
+		tokenPanel.setBounds(50,125,290,165);
+		
+		*/
+		tabbedPane = new JTabbedPane();
+		
+		addTab("1", new Token(1, 1, 1));
+		addTab("2", new Token(1,1,1));
+		addTab("3", new Token(1,1,1));
+		addTab("4", new Token(1,1,1));
+		addTab("5", new Token(1,1,1));
+		addTab("6", new Token(1,1,1));
+		
+		
+		tabbedPane.setBounds(50,125,290,165);
+		
+		contentPane.add(tabbedPane);
 	}
 
+	public static void addTab(String num, Token t){
+		TokenHolder pane = new TokenHolder(t);
+
+		JLabel pt = new JLabel(t.power + "/" + t.toughness);
+		JLabel consoleName = new JLabel("Console Name: TOK" + num);
+	
+		TextArea ta = new TextArea();
+		
+		for (Token.staticAbilities sa : t.abilityList){
+			
+		}
+		
+		pane.add(consoleName);
+		pane.add(ta);
+		pane.add(pt);
+		tabbedPane.addTab("Token " + num, null, pane, "TOK" + num);
+	}
+	
+	
+	
 	public GUI() {
 		instance = this;
 	}
@@ -222,6 +270,20 @@ public class GUI extends JFrame {
 			Engine.win();
 		}
 		enemyLifeLabel.setText(" " + String.valueOf(Engine.diq.life));
+		
+	}
+	
+}
+
+class TokenHolder extends JPanel{
+
+	private static final long serialVersionUID = 1L;
+	Token token;
+	public TokenHolder(Token t){
+		token = t;
+	}
+	public void setPreferredSize(int i, int j) {
+		// TODO Auto-generated method stub
 		
 	}
 }

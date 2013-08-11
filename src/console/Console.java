@@ -82,7 +82,7 @@ public class Console extends TextArea{
 			
 			return 1;
 		} else if (command.equalsIgnoreCase("nextturn")){
-			if (Engine.state.equals(Engine.state.CREATED)){
+			if (Engine.state.equals(Engine.State.CREATED)){
 				add("Engine not yet created.");
 				return 0;
 			} else {
