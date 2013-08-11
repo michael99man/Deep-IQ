@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import operators.Operator;
 
+import main.Engine;
 import main.GUI;
 
 public class Token implements Noun {
@@ -27,7 +28,7 @@ public class Token implements Noun {
 	public Token(int p, int t, int roll){
 		tokenAmount++;
 		
-		//process roll
+		processAbilities(roll);
 		
 		type = TYPE.Creature;
 		power = p;
@@ -37,6 +38,87 @@ public class Token implements Noun {
 		parent.addToken(this);
 	}
 	
+	private void processAbilities(int roll){
+		//Sigh... Using if loops is the simplest way to do this.
+		
+		if (roll <= 1){
+			System.out.println("No extra abilities.");
+		} else if (roll == 2){
+			abilityList.add(staticAbilities.First_Strike);
+		} else if (roll == 3){
+			toughness+=3;
+			abilityList.add(staticAbilities.Defender);
+		} else if (roll == 4){
+			abilityList.add(staticAbilities.Flying);
+		} else if (roll == 5){
+			//Add a random Pro
+			staticAbilities[] tempArray = {staticAbilities.ProRed, staticAbilities.ProBlue, staticAbilities.ProBlack, staticAbilities.ProWhite,staticAbilities.ProGreen};
+			int i = Engine.requestNumber();
+			
+			if (i % 2 == 1){
+				abilityList.add(tempArray[((i-1)/2 + 1)]);
+			} else {
+				abilityList.add(tempArray[i/2]);
+			}
+		} else if (roll == 6){
+			abilityList.add(staticAbilities.Deathtouch);
+			abilityList.add(staticAbilities.Defender);
+		} else if (roll == 7){
+			power+=2;
+			abilityList.add(staticAbilities.Flying);
+		} else if (roll == 8){
+			power+=1;
+			toughness+=2;
+			abilityList.add(staticAbilities.Lifelink);
+		} else if (roll == 9){
+			power+=2;
+			abilityList.add(staticAbilities.Trample);
+			abilityList.add(staticAbilities.Haste);
+		} else if (roll == 10){
+			//Add a random Pro
+			staticAbilities[] tempArray = {staticAbilities.ProRed, staticAbilities.ProBlue, staticAbilities.ProBlack, staticAbilities.ProWhite,staticAbilities.ProGreen};
+			int i = Engine.requestNumber();
+			
+			if (i % 2 == 1){
+				abilityList.add(tempArray[((i-1)/2 + 1)]);
+			} else {
+				abilityList.add(tempArray[i/2]);
+			}
+			
+			abilityList.add(staticAbilities.Vigilance);
+			abilityList.add(staticAbilities.Lifelink);
+		} else if (roll == 11){
+			power+=2;
+			toughness +=2;
+			abilityList.add(staticAbilities.Shroud);
+		} else if (roll == 12){
+			abilityList.add(staticAbilities.Annihilator1);
+			abilityList.add(staticAbilities.First_Strike);
+		} else if (roll == 13){
+			//Angel of Death
+			abilityList.add(staticAbilities.Lifelink);
+			abilityList.add(staticAbilities.Deathtouch);
+			abilityList.add(staticAbilities.Flying);
+		} else if (roll == 14){
+			power+=1;
+			toughness+=1;
+			abilityList.add(staticAbilities.Annihilator2);
+		} else if (roll == 15){
+			power += 2;
+			toughness += 2;
+			abilityList.add(staticAbilities.Lifelink);
+			abilityList.add(staticAbilities.Flying);
+			abilityList.add(staticAbilities.First_Strike);
+		} else if (roll >= 16){
+			//Welcome Progenitus to the world.
+			abilityList.add(staticAbilities.ProBlack);
+			abilityList.add(staticAbilities.ProRed);
+			abilityList.add(staticAbilities.ProGreen);
+			abilityList.add(staticAbilities.ProWhite);
+			abilityList.add(staticAbilities.ProBlue);
+		}
+		
+	}
 	
 	//Other
 	public Token(TYPE type, String describer){
@@ -58,7 +140,6 @@ public class Token implements Noun {
 		Deathtouch,
 		Flying,
 		First_Strike,
-		Regeneration,
 		Defender,
 		Haste,
 		Trample,
@@ -69,7 +150,10 @@ public class Token implements Noun {
 		ProRed,
 		ProBlue,
 		ProGreen,
-		ProWhite
+		ProWhite,
+		
+		Annihilator1,
+		Annihilator2
 	}
 
 	@Override
