@@ -56,7 +56,7 @@ public class Token implements Noun {
 		desc += "\n";
 	}
 
-	private void processAbilities(int roll) {
+	public void processAbilities(int roll) {
 		// Sigh... Using if loops is the simplest way to do this.
 		if (roll == 8 || roll == 11) {
 			tabAppend("Deep IQ has rolled an " + roll + " on the Token Chart");
@@ -205,14 +205,18 @@ public class Token implements Noun {
 	// Other
 	public Token(TYPE type, String describer) {
 		tokenAmount++;
+		consoleName = "TOK" + tokenAmount;
 		this.type = type;
 		desc = describer;
 
 		tokenList.add(this);
+		
+		// Update Console List
+		Console.updateTokens();
 	}
 
 	public static enum TYPE {
-		Creature, Enchantment;
+		Creature, Enchantment, Artifact;
 	}
 
 	public static enum staticAbilities {
@@ -287,6 +291,15 @@ public class Token implements Noun {
 
 	@Override
 	public String delete() {
+		//CLEAN UP FOR EACH TOKEN
+		if (desc.equals("All creatures tokens Deep IQ control get +1/+1.")){
+			for (Token t: tokenList){
+				t.power-=1;
+				t.toughness-=1;
+			}
+		} 
+		
+		
 		tokenList.remove(this);
 		return ("Token \"" + consoleName + "\"" + " deleted ");
 		// Updating is done in Console class, no need to update here.
