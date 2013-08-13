@@ -57,7 +57,7 @@ public class Token implements Noun {
 	}
 
 	public void processAbilities(int roll) {
-		// Sigh... Using if loops is the simplest way to do this.
+		// Sigh... Using if checks is the simplest way to do this.
 		if (roll == 8 || roll == 11) {
 			tabAppend("Deep IQ has rolled an " + roll + " on the Token Chart");
 		} else {
@@ -200,6 +200,7 @@ public class Token implements Noun {
 		}
 
 		desc = desc.substring(0, desc.length() - 1);
+		GUI.append(desc);
 	}
 
 	// Other
@@ -211,8 +212,10 @@ public class Token implements Noun {
 
 		tokenList.add(this);
 		
+		GUI.updateTokens(true);
 		// Update Console List
 		Console.updateTokens();
+		
 	}
 
 	public static enum TYPE {
@@ -224,7 +227,7 @@ public class Token implements Noun {
 
 		Protection_from_Black, Protection_from_Red, Protection_from_Blue, Protection_from_Green, Protection_from_White, Protection_from_Everything,
 
-		Annihilator_1, Annihilator_2,
+		Annihilator_1, Annihilator_2, Indestructable
 	}
 
 	@Override
@@ -273,19 +276,19 @@ public class Token implements Noun {
 
 	@Override
 	public String stage(Operator o, int b) {
-		// TODO Auto-generated method stub
+		//NO IMPLEMENTATION
 		return null;
 	}
 
 	@Override
 	public String hp(Operator o, int b) {
-		// TODO Auto-generated method stub
+		//NO IMPLEMENTATION
 		return null;
 	}
 
 	@Override
 	public String turn(Operator o, int b) {
-		// TODO Auto-generated method stub
+		//NO IMPLEMENTATION
 		return null;
 	}
 
@@ -297,11 +300,19 @@ public class Token implements Noun {
 				t.power-=1;
 				t.toughness-=1;
 			}
-		} 
+		} else if (desc.equals("Deep IQ gets +1 to all die rolls.")){
+			
+			Engine.boost = false;
+			for (Token t: tokenList){
+				if (t.desc.equals("Deep IQ gets +1 to all die rolls.")){
+					Engine.boost= true;
+				}
+			}
+		}
 		
 		
 		tokenList.remove(this);
-		return ("Token \"" + consoleName + "\"" + " deleted ");
+		return ("Token \"" + consoleName + "\"" + " deleted.");
 		// Updating is done in Console class, no need to update here.
 	}
 
