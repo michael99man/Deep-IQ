@@ -56,14 +56,17 @@ public class Token implements Noun {
 		desc += "\n";
 	}
 
-	public void processAbilities(int roll) {
+	public void processAbilities(String name, int roll){
+		
+		//IMPLEMENT THIS FOR SPOOKY-10
+		
 		// Sigh... Using if checks is the simplest way to do this.
 		if (roll == 8 || roll == 11) {
-			tabAppend("Deep IQ has rolled an " + roll + " on the Token Chart");
+			tabAppend(name + " has rolled an " + roll + " on the Token Chart");
 		} else {
-			tabAppend("Deep IQ has rolled a " + roll + " on the Token Chart");
+			tabAppend(name + " has rolled a " + roll + " on the Token Chart");
 		}
-
+		
 		// OUTPUT: tab
 		if (roll <= 1) {
 			System.out.println("No extra abilities.");
@@ -201,6 +204,10 @@ public class Token implements Noun {
 
 		desc = desc.substring(0, desc.length() - 1);
 		GUI.append(desc);
+	}
+	
+	public void processAbilities(int roll) {
+		processAbilities("Deep IQ", roll);
 	}
 
 	// Other

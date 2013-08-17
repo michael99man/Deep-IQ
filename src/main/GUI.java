@@ -191,13 +191,29 @@ public class GUI extends JFrame {
 		contentPane.add(tabbedPane);
 	}
 
-	public static void addTab(int num, Token t, boolean refocus) {
+	public static void addTab(int num, final Token t, boolean refocus) {
 
 		TokenHolder pane = new TokenHolder(t);
 		pane.setLayout(null);
 
 		JLabel consoleName = new JLabel("Console name: TOK" + num);
 		consoleName.setBounds(5, 0, 170, 18);
+		
+		Font font = new Font("AppleGothic", Font.BOLD, 14);
+		
+		JButton attackButton = new JButton("Life - " + t.power);
+		attackButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				System.out.println(tabbedPane.getSelectedIndex());
+				
+				((TokenHolder) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).attack();
+			}
+		});
+		
+		attackButton.setFont(font);
+		attackButton.setBounds(180, 0 , 80 , 20);
+		
 
 		JLabel pt = new JLabel("P/T: " + t.power + "/" + t.toughness);
 		pt.setBounds(5, 18, 100, 18);
@@ -205,7 +221,7 @@ public class GUI extends JFrame {
 		JLabel tapped = new JLabel("Tapped: " + t.tapped);
 		tapped.setBounds(5, 36, 150, 18);
 
-		Font font = new Font("AppleGothic", Font.BOLD, 14);
+	
 		pt.setFont(font);
 		consoleName.setFont(font);
 		tapped.setFont(font);
@@ -229,6 +245,7 @@ public class GUI extends JFrame {
 		pane.add(consoleName);
 		pane.add(pt);
 		pane.add(tapped);
+		pane.add(attackButton);
 
 		tabbedPane.addTab("Token " + num, null, pane, "TOK" + num);
 
@@ -336,6 +353,12 @@ class TokenHolder extends JPanel {
 
 	public TokenHolder(Token t) {
 		token = t;
+	}
+	
+	public void attack(){
+		Engine.player.life -= token.power;
+		GUI.append(token.consoleName + " has attacked you for " + token.power + " damage!");
+		GUI.updateDisplays();
 	}
 
 }

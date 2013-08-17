@@ -132,7 +132,7 @@ public class Engine {
 	}
 
 	public static void spookyRoll(int modifier) {
-		GUI.tabAppend(Data.spooky(modifier));
+		Data.spooky(modifier);
 	}
 
 	public static void lose() {

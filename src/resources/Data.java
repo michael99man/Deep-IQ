@@ -222,7 +222,7 @@ public final class Data {
 
 	};
 
-	public static String spooky(int mod) {
+	public static void spooky(int mod) {
 		int roll = Engine.requestNumber() + mod;
 
 		if (roll == 8 || roll == 11) {
@@ -240,57 +240,59 @@ public final class Data {
 				tok.power += 1;
 				tok.toughness += 1;
 			}
-			return "Deep IQ plays an enchantment token. While this is on the battlefield, all of its creature tokens gain +1/+1.";
+			GUI.tabAppend("Deep IQ plays an enchantment token. While this is on the battlefield, all of its creature tokens gain +1/+1.");
 		} else if (roll == 2) {
 
 			t = new Token(Token.TYPE.Artifact,
 					"Reroll the first \"Do nothing\" result of every turn.");
 
-			return "Deep IQ plays an artifact token. While this is on the battlefield, reroll the first \"Do nothing\" result of every turn.";
+			GUI.tabAppend("Deep IQ plays an artifact token. While this is on the battlefield, reroll the first \"Do nothing\" result of every turn.");
 		} else if (roll == 3) {
 			t = new Token(Token.TYPE.Artifact,
 					"Deep IQ gets +1 to all die rolls.");
 			Engine.boost = true;
-			return "Deep IQ plays an enchantment token. While this is on the battlefield, Deep IQ gets +1 to all die rolls.";
+			GUI.tabAppend("Deep IQ plays an enchantment token. While this is on the battlefield, Deep IQ gets +1 to all die rolls.");
 		} else if (roll == 4) {
-			return "Destroy all of your creatures.";
+			GUI.tabAppend("Destroy all of your creatures.");
 		} else if (roll == 5) {
 			Engine.diq.life+= 5;
 			Engine.diq.stage = 6;
-			return "Deep IQ gains 5 life and moves up to Table VI if it isn't already there.";
+			GUI.tabAppend("Deep IQ gains 5 life and moves up to Table VI if it isn't already there.");
 		} else if (roll == 6) {
 			Engine.player.life -= 10;
-			return "You take 10 damage.";
+			GUI.tabAppend("You take 10 damage.");
 		} else if (roll == 7) {
 			Engine.diq.life += 10;
-			return "Deep IQ gains 10 life.";
+			GUI.tabAppend("Deep IQ gains 10 life.");
 		} else if (roll == 8) {
-			return "Sacrifice a permanent of every type.";
+			GUI.tabAppend("Sacrifice a permanent of every type.");
 		} else if (roll == 9) {
-			return "Exile the top twenty cards in your library.";
+			GUI.tabAppend("Exile the top twenty cards in your library.");
 		} else if (roll == 10) {
 
+			
+			//
 			for (Token t: Token.tokenList){
-				t.processAbilities(Engine.requestNumber());
+				t.processAbilities(t.consoleName, Engine.requestNumber());
 			}
-			return "All of Deep IQ's tokens get a free roll on the token chart (+0). These additional abilities are permanent.";
+			
+			GUI.tabAppend("All of Deep IQ's tokens get a free roll on the token chart (+0). These additional abilities are permanent.");
 		} else if (roll == 11) {
 			Engine.diq.life += 25;
-			return "Deep IQ gains 25 life.";
+			GUI.tabAppend("Deep IQ gains 25 life.");
 		} else if (roll == 12) {
+			GUI.tabAppend("Put a Progenitus token onto the battlefield.");
 			t = new Token(10,10,16);
-			return "Put a Progenitus token onto the battlefield (10/10 Protection from Everything).";
 		} else if (roll == 13) {
 			
 			for (Token t : Token.tokenList){
 				t.abilityList.add(Token.staticAbilities.Indestructable);
 			}
-			return "All of Deep IQ's permanents are indestructable.";
+			GUI.tabAppend("All of Deep IQ's permanents are indestructable.");
 		} else if (roll >= 14) {
-			return "Destroy all of your permananents";
+			GUI.tabAppend("Destroy all of your permananents");
 		}
 
-		return null;
 	}
 
 	public interface Function {
