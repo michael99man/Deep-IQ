@@ -269,14 +269,11 @@ public final class Data {
 		} else if (roll == 9) {
 			GUI.tabAppend("Exile the top twenty cards in your library.");
 		} else if (roll == 10) {
-
-			
-			//
+			GUI.tabAppend("All of Deep IQ's tokens get a free roll on the token chart (+0). These additional abilities are permanent.");
 			for (Token t: Token.tokenList){
 				t.processAbilities(t.consoleName, Engine.requestNumber());
 			}
 			
-			GUI.tabAppend("All of Deep IQ's tokens get a free roll on the token chart (+0). These additional abilities are permanent.");
 		} else if (roll == 11) {
 			Engine.diq.life += 25;
 			GUI.tabAppend("Deep IQ gains 25 life.");

@@ -178,13 +178,6 @@ public class GUI extends JFrame {
 		contentPane.add(lifeLabel);
 		contentPane.add(enemyLifeLabel);
 
-		// TOKENS
-
-		/*
-		 * JPanel tokenPanel = new JPanel(); tokenPanel.setPreferredSize(new
-		 * Dimension(290,165)); tokenPanel.setBackground(Color.BLUE);
-		 * tokenPanel.setBounds(50,125,290,165);
-		 */
 		tabbedPane = new JTabbedPane();
 		tabbedPane.setBounds(50, 125, 290, 165);
 
@@ -204,9 +197,7 @@ public class GUI extends JFrame {
 		JButton attackButton = new JButton("Life - " + t.power);
 		attackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				System.out.println(tabbedPane.getSelectedIndex());
-				
+								
 				((TokenHolder) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex())).attack();
 			}
 		});
@@ -357,6 +348,17 @@ class TokenHolder extends JPanel {
 	
 	public void attack(){
 		Engine.player.life -= token.power;
+		
+		if (!(token.contains(Token.staticAbilities.Vigilance))){
+			token.tapped = true;
+		}
+	
+		if (token.contains(Token.staticAbilities.Lifelink)){
+			Engine.diq.life += token.power; 
+		}
+		
+		
+		
 		GUI.append(token.consoleName + " has attacked you for " + token.power + " damage!");
 		GUI.updateDisplays();
 	}

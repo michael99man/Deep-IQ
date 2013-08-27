@@ -49,6 +49,12 @@ public class Token implements Noun {
 		Console.updateTokens();
 	}
 
+	public boolean contains(staticAbilities s){
+		if (abilityList.contains(s)){
+			return true;
+		}
+		return false;
+	}
 	public void tabAppend(String s) {
 
 		desc += "\t";
@@ -60,7 +66,6 @@ public class Token implements Noun {
 		
 		//IMPLEMENT THIS FOR SPOOKY-10
 		
-		// Sigh... Using if checks is the simplest way to do this.
 		if (roll == 8 || roll == 11) {
 			tabAppend(name + " has rolled an " + roll + " on the Token Chart");
 		} else {
